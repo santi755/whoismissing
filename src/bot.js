@@ -1,12 +1,12 @@
-import people from '../config/people.json';
 import dotenv from 'dotenv';
 import { Client, Intents, MessageEmbed } from 'discord.js';
+import { GetUsersFromFile } from './services/manageFile.js'
 
 dotenv.config();
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const usersFromFile = GetUsersFromFile()
 
-console.log('peopleJson is ', people)
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 client.on('ready', () => {
     console.log(`${client.user.username} is Connected!`)
@@ -14,13 +14,13 @@ client.on('ready', () => {
 
 client.on('messageCreate', async message => {
     if (message.content === '/whoismissing') {
-        
+        console.log("PEOPLE => ", usersFromFile)
         const embed = new MessageEmbed()
         .setColor('#ae2c72')
         .setTitle('Who is missing in Daily?')
-        .setDescription('Some description here');
+        .setDescription('- Some description here\n- Second line');
 
-        message.reply({ content: 'Pong!', ephemeral: true, embeds: [embed] });
+        message.reply({ ephemeral: true, embeds: [embed] });
 /*
         message.reply('Loading who is missing...')
         
@@ -33,7 +33,7 @@ client.on('messageCreate', async message => {
             })
             
         }) 
-        */
+*/
     }
 })
 
