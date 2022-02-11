@@ -1,6 +1,9 @@
-const people = require('../config/people.json');
-require('dotenv').config();
-const { Client, Intents } = require('discord.js');
+import people from '../config/people.json';
+import dotenv from 'dotenv';
+import { Client, Intents, MessageEmbed } from 'discord.js';
+
+dotenv.config();
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 console.log('peopleJson is ', people)
@@ -10,10 +13,17 @@ client.on('ready', () => {
 })
 
 client.on('messageCreate', async message => {
-    if (message.content === '/who-is-missing') {
+    if (message.content === '/whoismissing') {
         
-        message.reply('Loading who is missing...')
+        const embed = new MessageEmbed()
+        .setColor('#ae2c72')
+        .setTitle('Who is missing in Daily?')
+        .setDescription('Some description here');
 
+        message.reply({ content: 'Pong!', ephemeral: true, embeds: [embed] });
+/*
+        message.reply('Loading who is missing...')
+        
         let channel = client.channels.cache.get("237324836333027329")
         console.log(`Channel is ${channel}`)
 
@@ -23,6 +33,7 @@ client.on('messageCreate', async message => {
             })
             
         }) 
+        */
     }
 })
 
