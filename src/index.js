@@ -4,7 +4,7 @@ import { GetUsersFromFile } from './services/manageFile.js'
 
 dotenv.config();
 
-// const usersFromFile = GetUsersFromFile()
+const usersFromFile = GetUsersFromFile()
 
 const client = new Client({
     intents: [
