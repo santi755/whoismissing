@@ -1,9 +1,11 @@
-import { accessGoggleSheet } from '../api/google.api.js'
-import people from '../../config/people.json' assert {type: "json"}
+import { accessGoggleSheet } from '../api/google.api.js';
+import people from '../../config/people.json';
 
 const GetUsersFromFile = () => {
     accessGoggleSheet().then(sheetData => {
-        console.log("Google sheetData => ", sheetData)
+        sheetData.forEach(data => {
+            console.log("data => ", data)
+        })
     })
 
     return people

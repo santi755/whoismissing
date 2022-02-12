@@ -1,7 +1,7 @@
-import { GoogleSpreadsheet } from 'google-spreadsheet'
-import credentials from '../../config/credentials.json' assert {type: "json"}
+import { GoogleSpreadsheet } from 'google-spreadsheet';
+import credentials from '../../config/credentials.json';
 
-let googleId = "1T3RK_IvLwX4kiRgHUTC7hc2zpHfNT-XO-Bymnhy_n80"
+let googleId = process.env.FILE_SPREAD_ID;
 
 const accessGoggleSheet = async () => {
 
@@ -13,7 +13,7 @@ const accessGoggleSheet = async () => {
     const sheetData = await sheet.getRows();
 
     return sheetData;
-
+    
 }
 
 export {

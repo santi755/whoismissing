@@ -1,8 +1,6 @@
-import dotenv from 'dotenv';
+import './config/config.js'
 import { Client, Intents, MessageEmbed } from 'discord.js';
-import { GetUsersFromFile } from './services/manageFile.js'
-
-dotenv.config();
+import { GetUsersFromFile } from './services/manageFile.js';
 
 const usersFromFile = GetUsersFromFile()
 
