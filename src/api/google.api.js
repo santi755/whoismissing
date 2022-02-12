@@ -1,5 +1,5 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet'
-import credentials from '../../config/credentials.json'
+import credentials from '../../config/credentials.json' assert {type: "json"}
 
 let googleId = "1T3RK_IvLwX4kiRgHUTC7hc2zpHfNT-XO-Bymnhy_n80"
 
