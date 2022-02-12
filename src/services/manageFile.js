@@ -10,5 +10,6 @@ const GetUsersFromFile = () => {
 }
 
 export {
-    GetUsersFromFile
+    GetUsersFromFile,
+    people
 }

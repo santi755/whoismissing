@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { Client, Intents, MessageEmbed } from 'discord.js';
-import { GetUsersFromFile } from './services/manageFile.js'
+import { GetUsersFromFile, people } from './services/manageFile.js'
 
 dotenv.config();
 
@@ -26,12 +26,16 @@ client.on('messageCreate', message => {
     if (message.content === '/whoismissing') {
 
         // List of connected users to channel voice
-        let users = getConnectedUsers(message)
+        let users = getConnectedUsers(message);
+
+        let missing = getMissingPeople(users);
+
+        let msg = getMissingMessage(missing)
 
         const embed = new MessageEmbed()
         .setColor('#ae2c72')
         .setTitle('Who is missing in Daily?')
-        .setDescription('- Some description here\n- Second line');
+        .setDescription(msg);
 
         message.reply({ ephemeral: true, embeds: [embed] });
     }
@@ -45,6 +49,31 @@ function getConnectedUsers(message) {
     });
 
     return users;
+}
+
+function getMissingPeople(users) {
+    let missing = [];
+    Object.keys(people).forEach(key => {
+        if (!((Array.isArray(users) && users.length) && users.includes(key))) {
+            missing.push(people[key])
+        }
+    });
+
+    return missing;
+}
+
+function getMissingMessage(missing) {
+    let msg = '';
+
+    if (!(Array.isArray(missing) && missing.length)) {
+        msg = 'No one is missing in the daily!';
+    }
+
+    missing.forEach(user => {
+       msg += user.name + '\n';
+    });
+
+    return msg;
 }
 
 client.login(process.env.DISCORDJS_BOT_TOKEN);
