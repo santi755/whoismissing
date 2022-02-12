@@ -1,8 +1,7 @@
 import './config/config';
 import { Client, Intents, MessageEmbed } from 'discord.js';
-import { GetUsersFromFile, people } from './services/manageFile';
-
-const usersFromFile = GetUsersFromFile();
+import GetUsersFromDrive from './services/manageFile.service';
+import people from '../config/people.json';
 
 const client = new Client({
   intents: [
@@ -29,11 +28,19 @@ function getConnectedUsers(message) {
   return users;
 }
 
-function getMissingPeople(users) {
+function getMissingPeople(connectedUsers) {
+  const usersOnVacation = GetUsersFromDrive();
+
   const missing = [];
-  Object.keys(people).forEach((key) => {
-    if (!((Array.isArray(users) && users.length) && users.includes(key))) {
-      missing.push(people[key]);
+
+  // Loop entire users list
+  Object.keys(people).forEach((peopleId) => {
+    // User is not on vacation
+    if (!usersOnVacation.includes(people[peopleId])) {
+      // User is not connected
+      if (!connectedUsers.includes(peopleId)) {
+        missing.push(people[peopleId]);
+      }
     }
   });
 
@@ -42,10 +49,6 @@ function getMissingPeople(users) {
 
 function getMissingMessage(missing) {
   let msg = '';
-
-  if (!(Array.isArray(missing) && missing.length)) {
-    msg = 'No one is missing in the daily!';
-  }
 
   missing.forEach((user) => {
     msg += `${user.name} \n`;
@@ -56,15 +59,13 @@ function getMissingMessage(missing) {
 
 client.on('messageCreate', (message) => {
   if (message.content === '/whoismissing') {
-    usersFromFile();
-
     // List of connected users to channel voice
-    const users = getConnectedUsers(message);
+    const connectedUsers = getConnectedUsers(message);
 
-    const missing = getMissingPeople(users);
+    // List of missing people
+    const missing = getMissingPeople(connectedUsers);
 
     const msg = getMissingMessage(missing);
-
     const embed = new MessageEmbed()
       .setColor('#ae2c72')
       .setTitle('Who is missing in Daily?')
