@@ -3,7 +3,7 @@ import credentials from '../../config/credentials.json';
 
 const googleId = process.env.FILE_SPREAD_ID;
 
-const accessGoggleSheet = async () => {
+const accessGooggleSheet = async () => {
   const document = new GoogleSpreadsheet(googleId);
   await document.useServiceAccountAuth(credentials);
   await document.loadInfo();
@@ -14,4 +14,4 @@ const accessGoggleSheet = async () => {
   return sheetData;
 };
 
-export default accessGoggleSheet;
+export default accessGooggleSheet;

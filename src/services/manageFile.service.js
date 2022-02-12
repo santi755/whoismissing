@@ -1,10 +1,10 @@
-import accessGoggleSheet from '../api/google.api';
+import accessGooggleSheet from '../api/google.api';
 
-const GetUsersFromDrive = () => {
-  accessGoggleSheet().then((sheetData) => {
-    sheetData.forEach((data) => {
-      console.log(data);
-    });
+const GetUsersFromDrive = async () => {
+  const sheetData = await accessGooggleSheet();
+
+  sheetData.forEach((data) => {
+    console.log('****************** DATA => ', data.QUIERO);
   });
 
   return [

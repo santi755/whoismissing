@@ -28,8 +28,8 @@ function getConnectedUsers(message) {
   return users;
 }
 
-function getMissingPeople(connectedUsers) {
-  const usersOnVacation = GetUsersFromDrive();
+async function getMissingPeople(connectedUsers) {
+  const usersOnVacation = await GetUsersFromDrive();
 
   const missing = [];
 
@@ -57,13 +57,13 @@ function getMissingMessage(missing) {
   return msg;
 }
 
-client.on('messageCreate', (message) => {
+client.on('messageCreate', async (message) => {
   if (message.content === '/whoismissing') {
     // List of connected users to channel voice
     const connectedUsers = getConnectedUsers(message);
 
     // List of missing people
-    const missing = getMissingPeople(connectedUsers);
+    const missing = await getMissingPeople(connectedUsers);
 
     const msg = getMissingMessage(missing);
     const embed = new MessageEmbed()
