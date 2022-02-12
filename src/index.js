@@ -1,78 +1,77 @@
-import './config/config.js'
+import './config/config';
 import { Client, Intents, MessageEmbed } from 'discord.js';
-import { GetUsersFromFile, people } from './services/manageFile.js'
+import { GetUsersFromFile, people } from './services/manageFile';
 
-const usersFromFile = GetUsersFromFile()
+const usersFromFile = GetUsersFromFile();
 
 const client = new Client({
-    intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_PRESENCES,
-        Intents.FLAGS.GUILD_VOICE_STATES,
-    ],
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
+    Intents.FLAGS.GUILD_PRESENCES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+  ],
 });
 
-let channelID = process.env.DISCORDJS_CHANNEL_ID
+const channelID = process.env.DISCORDJS_CHANNEL_ID;
 
 client.on('ready', () => {
-    console.log(`${client.user.username} is Connected!`)
-})
-
-client.on('messageCreate', message => {
-    if (message.content === '/whoismissing') {
-
-        // List of connected users to channel voice
-        let users = getConnectedUsers(message);
-
-        let missing = getMissingPeople(users);
-
-        let msg = getMissingMessage(missing)
-
-        const embed = new MessageEmbed()
-        .setColor('#ae2c72')
-        .setTitle('Who is missing in Daily?')
-        .setDescription(msg);
-
-        message.reply({ ephemeral: true, embeds: [embed] });
-    }
-})
+  console.log(`${client.user.username} is Connected!`);
+});
 
 function getConnectedUsers(message) {
-    let users = [];
-    message.guild.channels.cache.get(channelID).members.forEach((member) => {
-        // member.send('R!');
-        users.push(member.id);
-    });
+  const users = [];
+  message.guild.channels.cache.get(channelID).members.forEach((member) => {
+    users.push(member.id);
+  });
 
-    return users;
+  return users;
 }
 
 function getMissingPeople(users) {
-    let missing = [];
-    Object.keys(people).forEach(key => {
-        if (!((Array.isArray(users) && users.length) && users.includes(key))) {
-            missing.push(people[key])
-        }
-    });
+  const missing = [];
+  Object.keys(people).forEach((key) => {
+    if (!((Array.isArray(users) && users.length) && users.includes(key))) {
+      missing.push(people[key]);
+    }
+  });
 
-    return missing;
+  return missing;
 }
 
 function getMissingMessage(missing) {
-    let msg = '';
+  let msg = '';
 
-    if (!(Array.isArray(missing) && missing.length)) {
-        msg = 'No one is missing in the daily!';
-    }
+  if (!(Array.isArray(missing) && missing.length)) {
+    msg = 'No one is missing in the daily!';
+  }
 
-    missing.forEach(user => {
-       msg += user.name + '\n';
-    });
+  missing.forEach((user) => {
+    msg += `${user.name} \n`;
+  });
 
-    return msg;
+  return msg;
 }
 
-client.login(process.env.DISCORDJS_BOT_TOKEN);
+client.on('messageCreate', (message) => {
+  if (message.content === '/whoismissing') {
+    usersFromFile();
 
+    // List of connected users to channel voice
+    const users = getConnectedUsers(message);
+
+    const missing = getMissingPeople(users);
+
+    const msg = getMissingMessage(missing);
+
+    const embed = new MessageEmbed()
+      .setColor('#ae2c72')
+      .setTitle('Who is missing in Daily?')
+      .setDescription(msg);
+
+    message.reply({ ephemeral: true, embeds: [embed] });
+  }
+});
+
+client.login(process.env.DISCORDJS_BOT_TOKEN);
