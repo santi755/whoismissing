@@ -19,6 +19,42 @@ client.on('ready', () => {
   console.log(`${client.user.username} is Connected!`);
 });
 
+client.on('messageCreate', async (message, channel) => {
+  if (message.content === 'a') {
+    // List of connected users to channel voice
+    const connectedUsers = getConnectedUsers(message);
+
+    // List of missing people
+    const missing = await getMissingPeople(connectedUsers);
+
+    const msg = getMissingMessage(missing);
+
+    const button = new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+                .setCustomId('R')
+                .setLabel('R')
+                .setStyle('DANGER')
+        );
+
+    const embed = new MessageEmbed()
+      .setColor('#ae2c72')
+      .setTitle('Who is missing in Daily?')
+      .setDescription(msg);
+
+    message.reply({ ephemeral: true, embeds: [embed], components: [button] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+    if (interaction.isButton()) {
+      if (interaction.customId === 'R') {
+        sendWarningToMissing(interaction);
+        await interaction.reply({content: `They have received a warning by ${interaction.user.username}`});
+      }
+    }
+});
+
 function getConnectedUsers(message) {
   const users = [];
   message.guild.channels.cache.get(channelID).members.forEach((member) => {
@@ -26,6 +62,23 @@ function getConnectedUsers(message) {
   });
 
   return users;
+}
+
+async function sendWarningToMissing(message) {
+  const connectedUsers = getConnectedUsers(message);
+
+  // List of missing people
+  const missing = await getMissingPeople(connectedUsers);
+
+  missing.forEach((member_data) => {
+    let member_id = member_data.id;
+    let member = message.guild.members.cache.get(member_id);
+    console.log(member_id);
+    console.log(member);
+
+    //console.log(`Message sent to ${member.id}`);
+    member.send('R');
+  });
 }
 
 async function getMissingPeople(connectedUsers) {
@@ -57,40 +110,5 @@ function getMissingMessage(missing) {
 
   return msg;
 }
-
-client.on('messageCreate', async (message, channel) => {
-  if (message.content === 'a') {
-    // List of connected users to channel voice
-    const connectedUsers = getConnectedUsers(message);
-
-    // List of missing people
-    const missing = await getMissingPeople(connectedUsers);
-
-    const msg = getMissingMessage(missing);
-
-    const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('R')
-                .setLabel('R')
-                .setStyle('DANGER')
-        );
-
-    const embed = new MessageEmbed()
-      .setColor('#ae2c72')
-      .setTitle('Who is missing in Daily?')
-      .setDescription(msg);
-
-    message.reply({ ephemeral: true, embeds: [embed], components: [row] });
-  }
-});
-
-client.on('interactionCreate', async interaction => {
-    if (interaction.isButton()) {
-      if (interaction.customId === 'R') {
-        await interaction.reply({content: `They have received a warning by ${interaction.user.username}`});
-      }
-    }
-});
 
 client.login(process.env.DISCORDJS_BOT_TOKEN);
