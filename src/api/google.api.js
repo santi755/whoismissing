@@ -1,5 +1,5 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet';
-import credentials from '../../config/credentials.json';
+import credentials from '../../config/credentials.json' assert { type: "json" };
 
 const googleId = process.env.FILE_SPREAD_ID;
 

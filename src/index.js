@@ -1,7 +1,7 @@
 import './config/config';
-import { Client, Intents, MessageEmbed } from 'discord.js';
+import {Client, Intents, MessageEmbed, MessageButton, MessageActionRow, ButtonInteraction} from 'discord.js';
 import GetUsersFromDrive from './services/manageFile.service';
-import people from '../config/people.json';
+import people from '../config/people.json' assert { type: "json" };
 
 const client = new Client({
   intents: [
@@ -29,7 +29,8 @@ function getConnectedUsers(message) {
 }
 
 async function getMissingPeople(connectedUsers) {
-  const usersOnVacation = await GetUsersFromDrive();
+  //const usersOnVacation = await GetUsersFromDrive();
+  const usersOnVacation = [];
 
   const missing = [];
 
@@ -57,8 +58,8 @@ function getMissingMessage(missing) {
   return msg;
 }
 
-client.on('messageCreate', async (message) => {
-  if (message.content === '/whoismissing') {
+client.on('messageCreate', async (message, channel) => {
+  if (message.content === 'a') {
     // List of connected users to channel voice
     const connectedUsers = getConnectedUsers(message);
 
@@ -66,13 +67,30 @@ client.on('messageCreate', async (message) => {
     const missing = await getMissingPeople(connectedUsers);
 
     const msg = getMissingMessage(missing);
+
+    const row = new MessageActionRow()
+        .addComponents(
+            new MessageButton()
+                .setCustomId('R')
+                .setLabel('R')
+                .setStyle('DANGER')
+        );
+
     const embed = new MessageEmbed()
       .setColor('#ae2c72')
       .setTitle('Who is missing in Daily?')
       .setDescription(msg);
 
-    message.reply({ ephemeral: true, embeds: [embed] });
+    message.reply({ ephemeral: true, embeds: [embed], components: [row] });
   }
+});
+
+client.on('interactionCreate', async interaction => {
+    if (interaction.isButton()) {
+      if (interaction.customId === 'R') {
+        await interaction.reply({content: `They have received a warning by ${interaction.user.username}`});
+      }
+    }
 });
 
 client.login(process.env.DISCORDJS_BOT_TOKEN);
