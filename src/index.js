@@ -29,8 +29,9 @@ client.on('messageCreate', async (message, channel) => {
 
     const msg = getMissingMessage(missing);
 
+    let button = null;
     if (missing.length) {
-      const button = new MessageActionRow()
+      button = new MessageActionRow()
           .addComponents(
               new MessageButton()
                   .setCustomId('R')
