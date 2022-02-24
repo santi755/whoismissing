@@ -29,20 +29,22 @@ client.on('messageCreate', async (message, channel) => {
 
     const msg = getMissingMessage(missing);
 
-    const button = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('R')
-                .setLabel('R')
-                .setStyle('DANGER')
-        );
+    if (missing.length) {
+      const button = new MessageActionRow()
+          .addComponents(
+              new MessageButton()
+                  .setCustomId('R')
+                  .setLabel('R')
+                  .setStyle('DANGER')
+          );
+    }
 
     const embed = new MessageEmbed()
       .setColor('#ae2c72')
       .setTitle('Who is missing in Daily?')
       .setDescription(msg);
 
-    message.reply({ ephemeral: true, embeds: [embed], components: [button] });
+    missing.length ? message.reply({ ephemeral: true, embeds: [embed], components: [button] }) : message.reply({ ephemeral: true, embeds: [embed] });
   }
 });
 
@@ -107,6 +109,8 @@ function getMissingMessage(missing) {
   missing.forEach((user) => {
     msg += `${user.name} \n`;
   });
+
+  msg = !msg.length ? 'Nobody is missing, well done' : msg;
 
   return msg;
 }
