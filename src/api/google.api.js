@@ -8,10 +8,14 @@ const accessGooggleSheet = async () => {
   await document.useServiceAccountAuth(credentials);
   await document.loadInfo();
 
-  const sheet = document.sheetsByIndex[0];
-  const sheetData = await sheet.getRows();
+  // Sheet 1, TODO: Change for "sheet of current year"
+  let year = new Date().getFullYear();
+  const sheet = document.sheetsByTitle[year];
+  // const sheetRows = await sheet.getRows();
 
-  return sheetData;
+  const sheetCells = await sheet.getCellsInRange("A1:Z200");
+
+  return sheetCells;
 };
 
 export default accessGooggleSheet;

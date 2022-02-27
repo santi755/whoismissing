@@ -85,8 +85,7 @@ async function sendWarningToMissing(message) {
 }
 
 async function getMissingPeople(connectedUsers) {
-  //const usersOnVacation = await GetUsersFromDrive();
-  const usersOnVacation = [];
+  const usersOnVacation = await GetUsersFromDrive();
 
   const missing = [];
 
