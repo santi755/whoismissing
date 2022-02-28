@@ -92,7 +92,7 @@ async function getMissingPeople(connectedUsers) {
   // Loop entire users list
   Object.keys(people).forEach((peopleId) => {
     // User is not on vacation
-    if (!usersOnVacation.includes(people[peopleId])) {
+    if (!usersOnVacation.includes(people[peopleId].initials)) {
       // User is not connected
       if (!connectedUsers.includes(peopleId)) {
         missing.push(people[peopleId]);
