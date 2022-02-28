@@ -20,7 +20,7 @@ client.on('ready', () => {
 });
 
 client.on('messageCreate', async (message, channel) => {
-  if (message.content === 'a') {
+  if (message.content === '/whoismissing') {
     // List of connected users to channel voice
     const connectedUsers = getConnectedUsers(message);
 
