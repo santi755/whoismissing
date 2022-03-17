@@ -8,7 +8,7 @@ const accessGooggleSheet = async () => {
   await document.useServiceAccountAuth(credentials);
   await document.loadInfo();
 
-  // Sheet 1, TODO: Change for "sheet of current year"
+  // Sheet 1, TODO: Change for "sheet of current year" to make it work
   let year = new Date().getFullYear();
   const sheet = document.sheetsByTitle[year];
   // const sheetRows = await sheet.getRows();
