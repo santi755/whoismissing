@@ -39,6 +39,11 @@
     "name": "Jorge",
     "initials": "JT"
   },
+  "449196527898984459": {
+    "id": "963341516372312124",
+    "name": "Jose Ocheda",
+    "initials": "JOG"
+  },
   "930011376477429770": {
     "id": "930011376477429770",
     "name": "Julian",
@@ -73,5 +78,10 @@
     "id": "882515010511851550",
     "name": "Sergio Almela",
     "initials": "SA"
+  },
+  "882515010511851550": {
+    "id": "966234885364781116",
+    "name": "Sara Gisbert",
+    "initials": "SGB"
   }
 }
