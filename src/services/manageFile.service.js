@@ -17,7 +17,7 @@ const GetUsersFromDrive = async () => {
   const names = [];
 
   sheetCells.forEach((cell) => {
-    if (possibleNames >= 0 && pos > 0) {
+    if (possibleNames >= 0 && pos >= 0) {
       if (cell[pos]) {
         names.push(cell[pos]);
       }
