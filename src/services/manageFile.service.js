@@ -6,7 +6,7 @@ const GetUsersFromDrive = async () => {
   const date = new Date();
   const today = date.getDate().toString();
   const options = { year: 'numeric', month: 'long' };
-  const thisMonth = (date.toLocaleDateString('es-AR', options)).replace('de ', '');
+  const thisMonth = (date.toLocaleDateString('es-ES', options)).replace('de ', '');
 
   // Number of possible names in this month (rows)
   const POSSIBLEROWS = 8;
