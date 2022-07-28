@@ -46,6 +46,50 @@ client.on('messageCreate', async (message, channel) => {
       .setDescription(msg);
 
     missing.length ? message.reply({ ephemeral: true, embeds: [embed], components: [button] }) : message.reply({ ephemeral: true, embeds: [embed] });
+  } else if (message.content === '/whosbirthdayistoday') {
+    const keys = Object.keys(people);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+
+    const birthdayName = people[randomKey].name;
+
+    const embed = new MessageEmbed()
+      .setColor('#ae2c72')
+      .setTitle('Quién cumple años hoy?')
+      .setDescription(`${birthdayName} cumple años hoy. Felicidades ${birthdayName}!!! :birthday: :partying_face: :partying_face:`);
+
+    message.reply({ ephemeral: true, embeds: [embed] });
+  } else if(message.content === '/tellmeajoke') {
+    // TODO: Download this in local folder
+    const jokes1 = await fetch('https://raw.githubusercontent.com/elijahmanor/devpun/master/jokes.json').then(res => res.json());
+    const jokes2 = await fetch('https://raw.githubusercontent.com/ABSphreak/readme-jokes/master/src/jokes.json').then(res => res.json());
+
+    const jokes = []
+    jokes1.forEach((joke) => {
+      const _joke = {
+        question: joke.question,
+        answer: joke.answer,
+      }
+      jokes.push(_joke);
+    });
+
+    Object.values(jokes2).forEach((joke) => {
+      const _joke = {
+        question: joke.q,
+        answer: joke.a,
+      }
+      jokes.push(_joke);
+    });
+
+    const keys = Object.keys(jokes);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    const joke = jokes[randomKey];
+
+    const embed = new MessageEmbed()
+    .setColor('#ae2c72')
+    .setTitle(joke.question)
+    .setDescription(joke.answer);
+
+    message.reply({ ephemeral: true, embeds: [embed] });
   }
 });
 
